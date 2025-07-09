@@ -215,4 +215,877 @@
             font-size: 80px;
             bottom: 10px;
             right: 10px;
-            animation: roar 4s infinite
+            animation: roar 4s infinite;
+            z-index: 20;
+            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.3));
+        }
+        
+        @keyframes roar {
+            0%, 70% { transform: scale(1) rotate(0deg); }
+            80% { transform: scale(1.1) rotate(-5deg); }
+            90% { transform: scale(1.1) rotate(5deg); }
+            100% { transform: scale(1) rotate(0deg); }
+        }
+        
+        #pickaxe {
+            position: absolute;
+            font-size: 30px;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s;
+            z-index: 30;
+        }
+        
+        #pickaxe.digging {
+            transform: translate(-50%, -50%) rotate(-30deg);
+        }
+        
+        #controls {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        button {
+            background: #3498DB;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 18px;
+            border-radius: 25px;
+            cursor: pointer;
+            margin: 0 10px;
+            transition: background 0.3s;
+        }
+        
+        button:hover {
+            background: #2980B9;
+        }
+        
+        button:disabled {
+            background: #95A5A6;
+            cursor: not-allowed;
+        }
+        
+        #message {
+            text-align: center;
+            font-size: 20px;
+            color: #27AE60;
+            margin-top: 20px;
+            min-height: 30px;
+        }
+        
+        #message.error {
+            color: #E53E3E;
+        }
+        
+        .glowingHint {
+            position: absolute;
+            border: 3px solid #FFD700;
+            border-radius: 50%;
+            background: rgba(255, 215, 0, 0.2);
+            animation: glow 1s infinite alternate;
+            z-index: 14;
+            pointer-events: none;
+        }
+        
+        @keyframes glow {
+            from { box-shadow: 0 0 10px #FFD700; }
+            to { box-shadow: 0 0 20px #FFD700, 0 0 30px #FFD700; }
+        }
+        
+        #successMessage, #failMessage {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            text-align: center;
+            display: none;
+            z-index: 100;
+            width: 80%;
+            max-width: 400px;
+            box-sizing: border-box;
+        }
+        
+        #successMessage h2 {
+            color: #27AE60;
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+        
+        #failMessage h2 {
+            color: #E53E3E;
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+        
+        .trophy {
+            font-size: 80px;
+            margin-bottom: 20px;
+        }
+        
+        .warning-text {
+            background: #FFF3CD;
+            border: 2px solid #FFC107;
+            border-radius: 10px;
+            padding: 10px;
+            margin: 10px 0;
+            color: #856404;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .hint-text {
+            background: #D4EDDA;
+            border: 2px solid #28A745;
+            border-radius: 10px;
+            padding: 10px;
+            margin: 10px 0;
+            color: #155724;
+            text-align: center;
+        }
+        
+        #nextLevelButton {
+            background: #28A745;
+        }
+        
+        #nextLevelButton:hover {
+            background: #218838;
+        }
+        
+        .hide { display: none !important; }
+        
+        /* 手机适配 */
+        @media (max-width: 768px) {
+            body {
+                overflow-x: hidden;
+            }
+            
+            #gameContainer {
+                width: 100%;
+                padding: 10px;
+                margin-top: 10px;
+            }
+            
+            #gameTitle {
+                font-size: 20px;
+            }
+            
+            #gameInfo {
+                flex-wrap: wrap;
+                gap: 10px;
+                padding: 10px;
+            }
+            
+            .infoItem {
+                min-width: 45%;
+                flex-grow: 1;
+            }
+             .infoLabel {
+                font-size: 12px;
+            }
+            .infoValue {
+                font-size: 20px;
+            }
+            
+            #mainArea {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            #diggingArea {
+                width: 100%;
+                height: 400px; /* 调整手机上的高度 */
+                max-width: 100vw;
+            }
+            
+            #assemblyArea {
+                width: 100%;
+                height: 200px;
+                max-width: 100vw;
+            }
+            
+            #skeletonOutline {
+                flex-direction: row;
+                flex-wrap: wrap;
+                gap: 10px;
+                justify-content: center;
+            }
+            
+            .rock {
+                width: 60px !important;
+                height: 45px !important;
+            }
+            
+            #trex {
+                font-size: 40px;
+                bottom: 5px;
+                right: 5px;
+            }
+            
+            button {
+                padding: 10px 18px;
+                font-size: 14px;
+                margin: 5px;
+            }
+            
+            .skeletonPart {
+                font-size: 18px !important;
+                margin: 5px !important;
+            }
+            
+            .assembledPart {
+                font-size: 30px !important;
+            }
+            
+            .fossilPart {
+                font-size: 30px !important;
+            }
+            
+            .glowingHint {
+                width: 70px !important;
+                height: 55px !important;
+            }
+
+            #successMessage, #failMessage {
+                padding: 20px;
+            }
+            #successMessage h2, #failMessage h2 {
+                font-size: 28px;
+            }
+            .trophy {
+                font-size: 60px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="gameContainer">
+        <h1 id="gameTitle">🦖 恐龙化石挖掘大冒险 🦕</h1>
+        
+        <div id="levelSelect">
+            <h2>选择关卡</h2>
+            <div>
+                <button class="levelButton" onclick="startLevel(1)">
+                    <div>第一关</div>
+                    <div style="font-size: 14px;">简单 - 4块化石</div>
+                </button>
+                <button class="levelButton locked" id="level2Button" onclick="startLevel(2)">
+                    <div>第二关 🔒</div>
+                    <div style="font-size: 14px;">中等 - 5块化石+假石头</div>
+                </button>
+                <button class="levelButton locked" id="level3Button" onclick="startLevel(3)">
+                    <div>第三关 🔒</div>
+                    <div style="font-size: 14px;">困难 - 6块化石+极限挑战</div>
+                </button>
+            </div>
+        </div>
+        
+        <div id="gameArea" class="hide">
+            <div class="warning-text hide" id="warningText"></div>
+            <div class="hint-text hide" id="hintText"></div>
+            
+            <div id="gameInfo">
+                <div class="infoItem">
+                    <div class="infoLabel">找到的化石</div>
+                    <div class="infoValue" id="score">0/4</div>
+                </div>
+                <div class="infoItem">
+                    <div class="infoLabel">剩余时间</div>
+                    <div class="infoValue" id="time">120</div>
+                </div>
+                <div class="infoItem">
+                    <div class="infoLabel">霸王龙帮助</div>
+                    <div class="infoValue" id="helps">3</div>
+                </div>
+                <div class="infoItem hide" id="attemptsInfo">
+                    <div class="infoLabel">剩余挖掘</div>
+                    <div class="infoValue" id="attempts">-</div>
+                </div>
+            </div>
+            
+            <div id="mainArea">
+                <div id="diggingArea">
+                    <div id="trex">🦖</div>
+                    <div id="pickaxe">⛏️</div>
+                </div>
+                
+                <div id="assemblyArea">
+                    <div id="skeletonOutline"></div>
+                </div>
+            </div>
+            
+            <div id="controls">
+                <button onclick="backToMenu()">返回菜单</button>
+                <button onclick="restartLevel()">重新开始</button>
+                <button onclick="useTrexHelp()" id="helpButton">霸王龙帮助 (剩余: <span id="helpCount">3</span>)</button>
+            </div>
+            
+            <div id="message"></div>
+        </div>
+    </div>
+    
+    <div id="successMessage">
+        <div class="trophy">🏆</div>
+        <h2>闯关成功！</h2>
+        <p id="successText"></p>
+        <p>用时：<span id="finalTime"></span>秒</p>
+        <p id="attemptsText" class="hide">剩余挖掘次数：<span id="finalAttempts"></span></p>
+        <button onclick="backToMenu()">返回菜单</button>
+        <button id="nextLevelButton" onclick="nextLevel()">下一关</button>
+    </div>
+    
+    <div id="failMessage">
+        <div class="trophy">😢</div>
+        <h2>挑战失败</h2>
+        <p id="failReason"></p>
+        <p>找到了 <span id="finalScore"></span> 块化石</p>
+        <button onclick="restartLevel()">重新挑战</button>
+        <button onclick="backToMenu()">返回菜单</button>
+    </div>
+
+    <script>
+        // 游戏全局变量
+        let currentLevel = 1;
+        let score = 0;
+        let totalParts = 4;
+        let timeLeft = 120;
+        let startTime = 120;
+        let helpsLeft = 3;
+        let attemptsLeft = -1;
+        let gameActive = false;
+        let timer;
+        let fossilParts = [];
+        let rocks = [];
+        let unlockedLevels = [1];
+        let audioContext; // 声音模块
+        
+        // 关卡配置
+        const levelConfigs = {
+            1: {
+                title: '第一关（简单）',
+                titleColor: '#27AE60',
+                totalParts: 4,
+                totalRocks: 4,
+                fakeRocks: 0,
+                time: 120,
+                helps: 3,
+                attempts: -1,
+                message: '找出4块恐龙化石，组装完整的恐龙！',
+                parts: ['头部', '身体', '腿部', '尾巴'],
+                emojis: ['💀', '🦴', '🦵', '🦴']
+            },
+            2: {
+                title: '第二关（中等）',
+                titleColor: '#F39C12',
+                totalParts: 5,
+                totalRocks: 10,
+                fakeRocks: 5,
+                time: 120,
+                helps: 3,
+                attempts: 20,
+                message: '有假石头混入，但颜色略有不同，仔细观察！',
+                warning: '⚠️ 注意：本关有假石头混入，需要仔细观察！',
+                hint: '💡 提示：假石头颜色偏棕色，仔细看能分辨出来',
+                parts: ['头部', '颈部', '身体', '腿部', '尾巴'],
+                emojis: ['💀', '🦴', '🦴', '🦵', '🦴']
+            },
+            3: {
+                title: '第三关（困难）',
+                titleColor: '#E53E3E',
+                totalParts: 6,
+                totalRocks: 20,
+                fakeRocks: 14,
+                time: 150,
+                helps: 2,
+                attempts: 15,
+                message: '20块完全相同的石头，只有6块有化石！祝你好运！',
+                warning: '⚠️ 警告：20块石头完全相同，只有6块藏有化石！只有15次机会！',
+                parts: ['头部', '颈部', '身体', '前肢', '腿部', '尾巴'],
+                emojis: ['💀', '🦴', '🦴', '🦾', '🦵', '🦴'],
+                identicalRocks: true
+            }
+        };
+        
+        // 从localStorage加载进度
+        function loadProgress() {
+            const saved = localStorage.getItem('dinosaurGameProgress');
+            if (saved) {
+                try {
+                    unlockedLevels = JSON.parse(saved);
+                    if (!Array.isArray(unlockedLevels)) {
+                        unlockedLevels = [1];
+                    }
+                } catch (e) {
+                    unlockedLevels = [1];
+                }
+                updateLevelButtons();
+            }
+        }
+        
+        // 保存进度
+        function saveProgress() {
+            localStorage.setItem('dinosaurGameProgress', JSON.stringify(unlockedLevels));
+        }
+        
+        // 更新关卡按钮状态
+        function updateLevelButtons() {
+            if (unlockedLevels.includes(2)) {
+                document.getElementById('level2Button').classList.remove('locked');
+                document.getElementById('level2Button').innerHTML = `<div>第二关</div><div style="font-size: 14px;">中等 - 5块化石+假石头</div>`;
+            }
+            if (unlockedLevels.includes(3)) {
+                document.getElementById('level3Button').classList.remove('locked');
+                document.getElementById('level3Button').innerHTML = `<div>第三关</div><div style="font-size: 14px;">困难 - 6块化石+极限挑战</div>`;
+            }
+        }
+        
+        // 开始关卡
+        function startLevel(level) {
+            if (!unlockedLevels.includes(level)) {
+                return;
+            }
+            
+            currentLevel = level;
+            const config = levelConfigs[level];
+            
+            // 更新游戏参数
+            totalParts = config.totalParts;
+            startTime = config.time;
+            timeLeft = config.time;
+            helpsLeft = config.helps;
+            attemptsLeft = config.attempts;
+            score = 0;
+            
+            // 更新UI
+            document.getElementById('levelSelect').classList.add('hide');
+            document.getElementById('gameArea').classList.remove('hide');
+            const badge = document.querySelector('#gameTitle .difficulty-badge');
+            if (badge) {
+                badge.remove();
+            }
+            
+            const newBadge = document.createElement('span');
+            newBadge.className = 'difficulty-badge';
+            newBadge.style.color = config.titleColor;
+            newBadge.textContent = config.title;
+            document.getElementById('gameTitle').appendChild(newBadge);
+            
+            const warningText = document.getElementById('warningText');
+            if (config.warning) {
+                warningText.textContent = config.warning;
+                warningText.classList.remove('hide');
+            } else {
+                warningText.classList.add('hide');
+            }
+            
+            const hintText = document.getElementById('hintText');
+            if (config.hint) {
+                hintText.textContent = config.hint;
+                hintText.classList.remove('hide');
+            } else {
+                hintText.classList.add('hide');
+            }
+            
+            if (config.attempts > 0) {
+                document.getElementById('attemptsInfo').classList.remove('hide');
+                document.getElementById('attempts').textContent = config.attempts;
+            } else {
+                document.getElementById('attemptsInfo').classList.add('hide');
+            }
+            
+            updateAssemblyArea();
+            startGame();
+        }
+        
+        function updateAssemblyArea() {
+            const config = levelConfigs[currentLevel];
+            const skeletonOutline = document.getElementById('skeletonOutline');
+            skeletonOutline.innerHTML = '';
+            
+            config.parts.forEach(part => {
+                const div = document.createElement('div');
+                div.className = 'skeletonPart';
+                div.textContent = part;
+                skeletonOutline.appendChild(div);
+            });
+        }
+        
+        function createRocksAndFossils() {
+            const config = levelConfigs[currentLevel];
+            rocks = [];
+            fossilParts = [];
+            
+            const diggingArea = document.getElementById('diggingArea');
+            diggingArea.querySelectorAll('.rock, .fossilPart, .glowingHint').forEach(el => el.remove());
+            
+            const areaWidth = diggingArea.clientWidth;
+            const areaHeight = diggingArea.clientHeight;
+
+            // 如果区域尺寸为0，说明还没渲染，稍后重试
+            if (areaWidth === 0 || areaHeight === 0) {
+                requestAnimationFrame(createRocksAndFossils);
+                return;
+            }
+
+            const positions = [];
+            const isMobile = window.innerWidth <= 768;
+            const rockWidth = isMobile ? 60 : 100;
+            const rockHeight = isMobile ? 45 : 70;
+            
+            let cols, rows;
+            if (config.totalRocks <= 4) { cols = 2; rows = 2; }
+            else if (config.totalRocks <= 10) { cols = isMobile ? 4 : 5; rows = isMobile ? 3 : 2; }
+            else { cols = isMobile ? 5 : 5; rows = isMobile ? 4 : 4; }
+
+            const xPadding = areaWidth * 0.1;
+            const yPadding = areaHeight * 0.1;
+            const gridWidth = areaWidth - 2 * xPadding;
+            const gridHeight = areaHeight - 2 * yPadding;
+            
+            const xSpacing = gridWidth / cols;
+            const ySpacing = gridHeight / rows;
+
+            let count = 0;
+            for (let r = 0; r < rows; r++) {
+                for (let c = 0; c < cols; c++) {
+                    if (count < config.totalRocks) {
+                        positions.push({
+                            x: xPadding + c * xSpacing + (xSpacing - rockWidth) / 2,
+                            y: yPadding + r * ySpacing + (ySpacing - rockHeight) / 2
+                        });
+                        count++;
+                    }
+                }
+            }
+           
+            positions.sort(() => Math.random() - 0.5);
+            
+            for (let i = 0; i < config.totalParts; i++) {
+                const pos = positions[i];
+                const fossil = document.createElement('div');
+                fossil.className = 'fossilPart';
+                fossil.textContent = config.emojis[i];
+                fossil.dataset.partName = config.parts[i];
+                fossil.dataset.index = i;
+                fossil.style.left = pos.x + (rockWidth / 2) - (isMobile ? 15 : 25) + 'px';
+                fossil.style.top = pos.y + (rockHeight / 2) - (isMobile ? 22 : 35) + 'px';
+                diggingArea.appendChild(fossil);
+                fossilParts.push(fossil);
+                
+                const rock = document.createElement('div');
+                rock.className = 'rock';
+                rock.style.width = rockWidth + 'px';
+                rock.style.height = rockHeight + 'px';
+                if (!config.identicalRocks && currentLevel === 2) { rock.classList.add('real'); }
+                rock.style.left = pos.x + 'px';
+                rock.style.top = pos.y + 'px';
+                rock.dataset.index = i;
+                rock.dataset.hasFossil = 'true';
+                diggingArea.appendChild(rock);
+                rocks.push(rock);
+            }
+            
+            for (let i = config.totalParts; i < config.totalRocks; i++) {
+                const pos = positions[i];
+                const rock = document.createElement('div');
+                rock.className = 'rock';
+                rock.style.width = rockWidth + 'px';
+                rock.style.height = rockHeight + 'px';
+                if (!config.identicalRocks && currentLevel === 2) { rock.classList.add('fake'); }
+                rock.style.left = pos.x + 'px';
+                rock.style.top = pos.y + 'px';
+                rock.dataset.hasFossil = 'false';
+                diggingArea.appendChild(rock);
+                rocks.push(rock);
+            }
+        }
+        
+        const pickaxe = document.getElementById('pickaxe');
+        const diggingArea = document.getElementById('diggingArea');
+
+        function handlePointerMove(e) {
+            const rect = diggingArea.getBoundingClientRect();
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            pickaxe.style.left = clientX - rect.left + 'px';
+            pickaxe.style.top = clientY - rect.top + 'px';
+        }
+        
+        function handlePointerClick(e) {
+            e.preventDefault();
+            if (!gameActive) return;
+
+            const clientX = e.changedTouches ? e.changedTouches[0].clientX : e.clientX;
+            const clientY = e.changedTouches ? e.changedTouches[0].clientY : e.clientY;
+            const target = document.elementFromPoint(clientX, clientY);
+            
+            if (!target || !target.classList.contains('rock') || target.classList.contains('cracked')) return;
+            
+            pickaxe.classList.add('digging');
+            setTimeout(() => pickaxe.classList.remove('digging'), 200);
+            
+            if (attemptsLeft > 0) {
+                attemptsLeft--;
+                updateAttempts();
+            }
+            
+            if (target.dataset.hasFossil === 'true') {
+                target.classList.add('cracked');
+                const index = parseInt(target.dataset.index);
+                const fossil = fossilParts[index];
+                fossil.classList.add('revealed');
+                
+                setTimeout(() => {
+                    score++;
+                    updateScore();
+                    showMessage(`找到了恐龙的${fossil.dataset.partName}！`, false);
+                    playSound('find');
+                    addToAssembly(fossil);
+                    setTimeout(() => { fossil.style.display = 'none'; }, 500);
+                    if (score === totalParts) {
+                        setTimeout(() => {
+                            playSound('complete');
+                            endGame(true);
+                        }, 800);
+                    }
+                }, 300);
+            } else {
+                target.classList.add('cracked');
+                if (currentLevel === 2) { showMessage('这是一块假石头！注意观察颜色差异！', true); } 
+                else if (currentLevel === 3) { showMessage('这是一块假石头！', true); }
+                playSound('wrong');
+            }
+            
+            if (attemptsLeft === 0 && score < totalParts) {
+                setTimeout(() => endGame(false, 'attempts'), 1000);
+            }
+        }
+        
+        diggingArea.addEventListener('mousemove', handlePointerMove);
+        diggingArea.addEventListener('touchmove', handlePointerMove);
+        diggingArea.addEventListener('click', handlePointerClick);
+        diggingArea.addEventListener('touchend', handlePointerClick);
+        
+        function addToAssembly(fossil) {
+            const partName = fossil.dataset.partName;
+            const outlineParts = document.querySelectorAll('.skeletonPart');
+            outlineParts.forEach((part) => {
+                if (part.textContent === partName && !part.classList.contains('assembledPart')) {
+                    part.textContent = fossil.textContent;
+                    part.classList.add('assembledPart');
+                }
+            });
+        }
+        
+        function useTrexHelp() {
+            if (!gameActive || helpsLeft <= 0) return;
+            helpsLeft--;
+            document.getElementById('helps').textContent = helpsLeft;
+            document.getElementById('helpCount').textContent = helpsLeft;
+            if (helpsLeft === 0) { document.getElementById('helpButton').disabled = true; }
+            
+            const trex = document.getElementById('trex');
+            trex.style.animation = 'none';
+            setTimeout(() => { trex.style.animation = 'roar 4s infinite'; }, 100);
+            
+            const realRocks = rocks.filter(r => r.dataset.hasFossil === 'true' && !r.classList.contains('cracked'));
+            
+            if (realRocks.length > 0) {
+                const rock = realRocks[Math.floor(Math.random() * realRocks.length)];
+                document.querySelectorAll('.glowingHint').forEach(hint => hint.remove());
+                const hint = document.createElement('div');
+                hint.className = 'glowingHint';
+                hint.style.left = rock.style.left;
+                hint.style.top = rock.style.top;
+                hint.style.width = rock.style.width;
+                hint.style.height = rock.style.height;
+                diggingArea.appendChild(hint);
+                setTimeout(() => hint.remove(), 5000);
+                showMessage('霸王龙帮你找到了一块真正的化石！', false);
+            } else {
+                showMessage('已经没有未发现的化石了！', false);
+            }
+        }
+        
+        function startGame() {
+            gameActive = true;
+            score = 0;
+            
+            document.getElementById('time').classList.remove('warning');
+            const attemptsEl = document.getElementById('attempts');
+            if (attemptsEl) {
+                attemptsEl.classList.remove('warning');
+            }
+
+            updateScore();
+            updateAttempts();
+            document.getElementById('time').textContent = timeLeft;
+            document.getElementById('helps').textContent = helpsLeft;
+            document.getElementById('helpCount').textContent = helpsLeft;
+            document.getElementById('helpButton').disabled = (helpsLeft <= 0);
+            document.getElementById('successMessage').style.display = 'none';
+            document.getElementById('failMessage').style.display = 'none';
+            
+            const config = levelConfigs[currentLevel];
+            showMessage(config.message, false);
+
+            // ***核心修复***: 延迟到下一帧再创建石头，确保容器已渲染
+            requestAnimationFrame(createRocksAndFossils);
+            
+            clearInterval(timer);
+            timer = setInterval(() => {
+                if (!gameActive) {
+                    clearInterval(timer);
+                    return;
+                }
+                timeLeft--;
+                document.getElementById('time').textContent = timeLeft;
+                if (timeLeft <= 10) { document.getElementById('time').classList.add('warning'); }
+                if (timeLeft <= 0 && score < totalParts) { endGame(false, 'time'); }
+            }, 1000);
+        }
+        
+        function endGame(success, reason = '') {
+            gameActive = false;
+            clearInterval(timer);
+            
+            if (success) {
+                const config = levelConfigs[currentLevel];
+                document.getElementById('successText').textContent = 
+                    currentLevel === 1 ? '你成功组装了完整的恐龙骨架！' :
+                    currentLevel === 2 ? '你成功躲过了假石头的干扰，找齐了所有化石！' :
+                    '你在极限挑战中成功了！你是真正的考古大师！';
+                
+                document.getElementById('finalTime').textContent = startTime - timeLeft;
+                
+                if (config.attempts > 0) {
+                    document.getElementById('attemptsText').classList.remove('hide');
+                    document.getElementById('finalAttempts').textContent = attemptsLeft;
+                } else {
+                    document.getElementById('attemptsText').classList.add('hide');
+                }
+                
+                if (currentLevel < 3) {
+                    document.getElementById('nextLevelButton').style.display = 'inline-block';
+                    if (!unlockedLevels.includes(currentLevel + 1)) {
+                        unlockedLevels.push(currentLevel + 1);
+                        saveProgress();
+                    }
+                } else {
+                    document.getElementById('nextLevelButton').style.display = 'none';
+                }
+                document.getElementById('successMessage').style.display = 'block';
+            } else {
+                document.getElementById('finalScore').textContent = `${score}/${totalParts}`;
+                if (reason === 'time') { document.getElementById('failReason').textContent = '时间用完了！'; } 
+                else if (reason === 'attempts') { document.getElementById('failReason').textContent = '挖掘次数用完了！'; }
+                document.getElementById('failMessage').style.display = 'block';
+            }
+        }
+        
+        function backToMenu() {
+            gameActive = false;
+            clearInterval(timer);
+            document.getElementById('gameArea').classList.add('hide');
+            document.getElementById('levelSelect').classList.remove('hide');
+            document.getElementById('successMessage').style.display = 'none';
+            document.getElementById('failMessage').style.display = 'none';
+            updateLevelButtons();
+        }
+        
+        function restartLevel() {
+            document.getElementById('successMessage').style.display = 'none';
+            document.getElementById('failMessage').style.display = 'none';
+            startLevel(currentLevel);
+        }
+        
+        function nextLevel() {
+            if (currentLevel < 3) {
+                document.getElementById('successMessage').style.display = 'none';
+                startLevel(currentLevel + 1);
+            }
+        }
+        
+        function updateScore() {
+            document.getElementById('score').textContent = `${score}/${totalParts}`;
+        }
+        
+        function updateAttempts() {
+            if (attemptsLeft >= 0) {
+                const el = document.getElementById('attempts');
+                el.textContent = attemptsLeft;
+                if (attemptsLeft <= 5) { el.classList.add('warning'); } 
+                else { el.classList.remove('warning'); }
+            }
+        }
+        
+        function showMessage(msg, isError) {
+            const messageEl = document.getElementById('message');
+            messageEl.textContent = msg;
+            messageEl.className = isError ? 'error' : '';
+            setTimeout(() => {
+                if (messageEl.textContent === msg) {
+                    messageEl.textContent = '';
+                    messageEl.className = '';
+                }
+            }, 3000);
+        }
+        
+        // ***核心修复***: 更稳定的声音处理
+        function initAudio() {
+            if (!audioContext && (window.AudioContext || window.webkitAudioContext)) {
+                try {
+                    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    if (audioContext.state === 'suspended') {
+                        audioContext.resume();
+                    }
+                } catch (e) {
+                    console.error("AudioContext could not be created:", e);
+                }
+            }
+        }
+
+        function playSound(type) {
+            if (!audioContext || audioContext.state !== 'running') return;
+            
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            gainNode.gain.setValueAtTime(0.2, audioContext.currentTime);
+
+            const now = audioContext.currentTime;
+            if (type === 'find') {
+                oscillator.frequency.setValueAtTime(523.25, now);
+                oscillator.frequency.exponentialRampToValueAtTime(1046.50, now + 0.1);
+                gainNode.gain.exponentialRampToValueAtTime(0.00001, now + 0.3);
+            } else if (type === 'wrong') {
+                oscillator.frequency.setValueAtTime(200, now);
+                oscillator.frequency.exponentialRampToValueAtTime(100, now + 0.2);
+                 gainNode.gain.exponentialRampToValueAtTime(0.00001, now + 0.3);
+            } else if (type === 'complete') {
+                gainNode.gain.setValueAtTime(0.2, now);
+                oscillator.frequency.setValueAtTime(523.25, now);
+                oscillator.frequency.setValueAtTime(659.25, now + 0.1);
+                oscillator.frequency.setValueAtTime(783.99, now + 0.2);
+                oscillator.frequency.setValueAtTime(1046.50, now + 0.3);
+                gainNode.gain.exponentialRampToValueAtTime(0.00001, now + 0.5);
+            }
+            
+            oscillator.start(now);
+            oscillator.stop(now + 0.5);
+        }
+        
+        // 初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            // ***核心修复***: 在首次交互时初始化声音
+            document.body.addEventListener('click', initAudio, { once: true });
+            loadProgress();
+        });
+    </script>
+</body>
+</html>
