@@ -417,6 +417,10 @@
                 font-size: 24px !important;
                 margin: 8px 0 !important;
             }
+            
+            .fossilPart {
+                font-size: 35px !important;
+            }
         }
 
         /* 微信浏览器特别优化 */
@@ -703,22 +707,24 @@
                     }
                 }
             } else if (currentLevel === 2) {
-                // 第二关：5x2布局
-                for (let i = 0; i < 5; i++) {
-                    for (let j = 0; j < 2; j++) {
-                        positions.push({
-                            x: 30 + i * 95,
-                            y: 120 + j * 180
-                        });
+                // 第二关：手机适配 - 3x4布局
+                for (let i = 0; i < 3; i++) {
+                    for (let j = 0; j < 4; j++) {
+                        if (i * 4 + j < 10) {  // 只创建10个位置
+                            positions.push({
+                                x: 40 + i * 85,
+                                y: 20 + j * 85
+                            });
+                        }
                     }
                 }
             } else if (currentLevel === 3) {
-                // 第三关：5x4布局，确保20个位置
-                for (let i = 0; i < 5; i++) {
-                    for (let j = 0; j < 4; j++) {
+                // 第三关：手机适配 - 4x5布局
+                for (let i = 0; i < 4; i++) {
+                    for (let j = 0; j < 5; j++) {
                         positions.push({
-                            x: 20 + i * 95 + Math.random() * 10,
-                            y: 30 + j * 115 + Math.random() * 10
+                            x: 20 + i * 70,
+                            y: 10 + j * 68
                         });
                     }
                 }
@@ -742,8 +748,8 @@
                 fossil.textContent = config.emojis[i];
                 fossil.dataset.partName = config.parts[i];
                 fossil.dataset.index = i;
-                fossil.style.left = pos.x + 25 + 'px';
-                fossil.style.top = pos.y + 10 + 'px';
+                fossil.style.left = pos.x + 18 + 'px';
+                fossil.style.top = pos.y + 8 + 'px';
                 diggingArea.appendChild(fossil);
                 fossilParts.push(fossil);
                 
@@ -892,8 +898,8 @@
                 
                 const hint = document.createElement('div');
                 hint.className = 'glowingHint';
-                hint.style.left = (parseInt(rock.style.left) - 10) + 'px';
-                hint.style.top = (parseInt(rock.style.top) - 10) + 'px';
+                hint.style.left = (parseInt(rock.style.left) - 25) + 'px';
+                hint.style.top = (parseInt(rock.style.top) - 20) + 'px';
                 document.getElementById('diggingArea').appendChild(hint);
                 
                 setTimeout(() => hint.remove(), 5000);
