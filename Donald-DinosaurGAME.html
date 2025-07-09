@@ -691,16 +691,17 @@
             // 根据关卡创建足够的位置
             const positions = [];
             
-            if (currentLevel === 1) {
-                // 第一关：2x2布局
-                for (let i = 0; i < 2; i++) {
-                    for (let j = 0; j < 2; j++) {
-                        positions.push({
-                            x: 150 + i * 150,
-                            y: 150 + j * 150
-                        });
-                    }
-                }
+if (currentLevel === 1) {
+    // 第一关：2x2布局 - 手机适配
+    for (let i = 0; i < 2; i++) {
+        for (let j = 0; j < 2; j++) {
+            positions.push({
+                x: 50 + i * 120,  // 改小了间距
+                y: 100 + j * 120  // 改小了间距
+            });
+        }
+    }
+}
             } else if (currentLevel === 2) {
                 // 第二关：5x2布局
                 for (let i = 0; i < 5; i++) {
