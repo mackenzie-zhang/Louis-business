@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
- <meta name="viewport" content="width=device-width, initial-scale=0.5, maximum-scale=1.0, user-scalable=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=0.5, maximum-scale=1.0, user-scalable=yes">
     <title>恐龙化石挖掘游戏</title>
     <style>
         body {
@@ -353,78 +353,79 @@
         }
         
         .hide { display: none !important; }
+        
         /* 手机适配 */
-@media (max-width: 768px) {
-    body {
-        overflow-x: hidden;
-    }
-    
-    #gameContainer {
-        width: 100%;
-        padding: 10px;
-        margin-top: 10px;
-    }
-    
-    #gameTitle {
-        font-size: 20px;
-    }
-    
-    #gameInfo {
-        flex-wrap: wrap;
-        gap: 10px;
-    }
-    
-    .infoItem {
-        min-width: 45%;
-    }
-    
-    #mainArea {
-        flex-direction: column;
-        gap: 10px;
-    }
-    
-    #diggingArea {
-        width: 100%;
-        height: 350px;
-        max-width: 100vw;
-    }
-    
-    #assemblyArea {
-        width: 100%;
-        height: 300px;
-        max-width: 100vw;
-    }
-    
-    .rock {
-        width: 70px !important;
-        height: 50px !important;
-    }
-    
-    #trex {
-        font-size: 50px;
-        bottom: 5px;
-        right: 5px;
-    }
-    
-    button {
-        padding: 8px 16px;
-        font-size: 14px;
-        margin: 5px;
-    }
-    
-    .skeletonPart {
-        font-size: 24px !important;
-        margin: 8px 0 !important;
-    }
-}
+        @media (max-width: 768px) {
+            body {
+                overflow-x: hidden;
+            }
+            
+            #gameContainer {
+                width: 100%;
+                padding: 10px;
+                margin-top: 10px;
+            }
+            
+            #gameTitle {
+                font-size: 20px;
+            }
+            
+            #gameInfo {
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+            
+            .infoItem {
+                min-width: 45%;
+            }
+            
+            #mainArea {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            #diggingArea {
+                width: 100%;
+                height: 350px;
+                max-width: 100vw;
+            }
+            
+            #assemblyArea {
+                width: 100%;
+                height: 300px;
+                max-width: 100vw;
+            }
+            
+            .rock {
+                width: 70px !important;
+                height: 50px !important;
+            }
+            
+            #trex {
+                font-size: 50px;
+                bottom: 5px;
+                right: 5px;
+            }
+            
+            button {
+                padding: 8px 16px;
+                font-size: 14px;
+                margin: 5px;
+            }
+            
+            .skeletonPart {
+                font-size: 24px !important;
+                margin: 8px 0 !important;
+            }
+        }
 
-/* 微信浏览器特别优化 */
-@media screen and (max-width: 400px) {
-    #gameContainer {
-        transform: scale(0.9);
-        transform-origin: top center;
-    }
-}
+        /* 微信浏览器特别优化 */
+        @media screen and (max-width: 400px) {
+            #gameContainer {
+                transform: scale(0.9);
+                transform-origin: top center;
+            }
+        }
     </style>
 </head>
 <body>
@@ -691,17 +692,16 @@
             // 根据关卡创建足够的位置
             const positions = [];
             
-if (currentLevel === 1) {
-    // 第一关：2x2布局 - 手机适配
-    for (let i = 0; i < 2; i++) {
-        for (let j = 0; j < 2; j++) {
-            positions.push({
-                x: 50 + i * 120,  // 改小了间距
-                y: 100 + j * 120  // 改小了间距
-            });
-        }
-    }
-}
+            if (currentLevel === 1) {
+                // 第一关：2x2布局 - 手机适配
+                for (let i = 0; i < 2; i++) {
+                    for (let j = 0; j < 2; j++) {
+                        positions.push({
+                            x: 50 + i * 120,
+                            y: 100 + j * 120
+                        });
+                    }
+                }
             } else if (currentLevel === 2) {
                 // 第二关：5x2布局
                 for (let i = 0; i < 5; i++) {
