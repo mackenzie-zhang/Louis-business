@@ -1,0 +1,1247 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Louis的游戏星球 - AI游戏开发冒险</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            background: #ffffff;
+            color: #1a1a1a;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* 导航栏 - 游戏菜单风格 */
+        nav {
+            background: #000000;
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 4px solid #00ff00;
+        }
+
+        nav .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: #00ff00;
+            text-shadow: 2px 2px 0px #0066cc;
+            letter-spacing: 2px;
+            position: relative;
+        }
+
+        .logo::after {
+            content: '🎮';
+            position: absolute;
+            right: -30px;
+            top: -5px;
+            font-size: 1.2rem;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 2rem;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #ffffff;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            position: relative;
+            padding: 5px 10px;
+        }
+
+        nav a::before {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: #ff0000;
+            transition: width 0.3s ease;
+        }
+
+        nav a:hover::before {
+            width: 100%;
+        }
+
+        nav a:hover {
+            color: #00ff00;
+        }
+
+        /* 容器 */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* 英雄区域 */
+        .hero {
+            padding: 8rem 0 2rem;
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* 波浪装饰 */
+        .wave {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='%23ffffff' fill-opacity='1' d='M0,160L48,170.7C96,181,192,203,288,197.3C384,192,480,160,576,154.7C672,149,768,171,864,181.3C960,192,1056,192,1152,181.3C1248,171,1344,149,1392,138.7L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z'%3E%3C/path%3E%3C/svg%3E") no-repeat;
+            background-size: cover;
+        }
+
+        /* 像素风格装饰 - 响应式优化 */
+        .pixel-decoration {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background: #00ff00;
+            opacity: 0.3;
+            border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+            animation: morphing 8s ease-in-out infinite;
+        }
+
+        @media (max-width: 768px) {
+            .pixel-decoration {
+                width: 30px;
+                height: 30px;
+            }
+        }
+
+        @keyframes morphing {
+            0%, 100% {
+                border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+                transform: rotate(0deg);
+            }
+            50% {
+                border-radius: 70% 30% 30% 70% / 70% 70% 30% 30%;
+                transform: rotate(180deg);
+            }
+        }
+
+        .pixel-1 {
+            top: 20%;
+            left: 5%;
+        }
+
+        .pixel-2 {
+            top: 60%;
+            right: 10%;
+            background: #ff0000;
+            animation-delay: 2s;
+        }
+
+        .pixel-3 {
+            bottom: 20%;
+            left: 15%;
+            background: #0066cc;
+            animation-delay: 4s;
+        }
+
+        .hero-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        @media (max-width: 1024px) {
+            .hero-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+        }
+
+        .hero-text h1 {
+            font-size: 3.5rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #000000, #0066cc, #00ff00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.2;
+        }
+
+        .hero-text .subtitle {
+            font-size: 1.5rem;
+            color: #ff0000;
+            margin-bottom: 2rem;
+            font-weight: 700;
+            display: inline-block;
+            padding: 0.5rem 1.5rem;
+            background: #ffeeee;
+            border-radius: 50px;
+            border: 3px solid #ff0000;
+        }
+
+        .hero-text p {
+            font-size: 1.2rem;
+            color: #333333;
+            margin-bottom: 2.5rem;
+            line-height: 1.8;
+        }
+
+        /* 游戏控制台风格 */
+        .game-console {
+            background: #1a1a1a;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            border: 4px solid #333;
+            position: relative;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .console-screen {
+            background: #000;
+            border-radius: 10px;
+            padding: 2rem;
+            min-height: 300px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .console-text {
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 10px;
+            height: 20px;
+            background: #00ff00;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 49% { opacity: 1; }
+            50%, 100% { opacity: 0; }
+        }
+
+        /* 按钮样式 - 游戏按钮风格 */
+        .btn {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            font-size: 1.2rem;
+            font-weight: 700;
+            text-decoration: none;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-play {
+            background: #00ff00;
+            color: #000000;
+            border: 3px solid #000000;
+            box-shadow: 5px 5px 0px #000000;
+        }
+
+        .btn-play:hover {
+            transform: translate(-3px, -3px);
+            box-shadow: 8px 8px 0px #000000;
+        }
+
+        .btn-learn {
+            background: #0066cc;
+            color: white;
+            border: 3px solid #000000;
+            box-shadow: 5px 5px 0px #000000;
+            margin-left: 1rem;
+        }
+
+        .btn-learn:hover {
+            transform: translate(-3px, -3px);
+            box-shadow: 8px 8px 0px #000000;
+        }
+
+        /* 部分标题 - 游戏风格 */
+        .section {
+            padding: 5rem 0;
+            position: relative;
+        }
+
+        .section-title {
+            font-size: 3rem;
+            font-weight: 900;
+            text-align: center;
+            margin-bottom: 1rem;
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .title-green {
+            color: #00ff00;
+            text-shadow: 3px 3px 0px #000000;
+        }
+
+        .title-blue {
+            color: #0066cc;
+            text-shadow: 3px 3px 0px #000000;
+        }
+
+        .title-red {
+            color: #ff0000;
+            text-shadow: 3px 3px 0px #000000;
+        }
+
+        .section-subtitle {
+            font-size: 1.3rem;
+            color: #666666;
+            text-align: center;
+            margin-bottom: 3rem;
+            font-weight: 600;
+        }
+
+        /* 游戏卡片 - 创意形状 */
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .game-card {
+            background: #ffffff;
+            padding: 2.5rem;
+            position: relative;
+            transition: all 0.3s ease;
+            overflow: visible;
+            border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .game-card:nth-child(1) {
+            border: 4px solid #00ff00;
+            background: linear-gradient(135deg, #ffffff 0%, #e6ffe6 100%);
+        }
+
+        .game-card:nth-child(2) {
+            border: 4px solid #0066cc;
+            background: linear-gradient(135deg, #ffffff 0%, #e6f2ff 100%);
+            border-radius: 70% 30% 30% 70% / 70% 70% 30% 30%;
+        }
+
+        .game-card:nth-child(3) {
+            border: 4px solid #ff0000;
+            background: linear-gradient(135deg, #ffffff 0%, #ffe6e6 100%);
+            border-radius: 50% 50% 30% 70% / 30% 70% 70% 30%;
+        }
+
+        .game-card:hover {
+            transform: translateY(-15px) rotate(2deg);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+
+        .game-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .game-icon {
+            font-size: 3rem;
+            margin-right: 1rem;
+            animation: wiggle 2s ease-in-out infinite;
+        }
+
+        @keyframes wiggle {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-5deg); }
+            75% { transform: rotate(5deg); }
+        }
+
+        .game-card h3 {
+            font-size: 1.8rem;
+            color: #000000;
+            font-weight: 800;
+        }
+
+        .game-card p {
+            color: #333333;
+            line-height: 1.8;
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .play-btn {
+            display: inline-block;
+            padding: 0.8rem 2rem;
+            background: #000000;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .play-btn:hover {
+            background: #333333;
+            transform: scale(1.05);
+        }
+
+        /* 特性展示 - 创意布局 */
+        .features {
+            background: #f8f9fa;
+            position: relative;
+            padding-bottom: 0;
+        }
+
+        .features-wave {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 150px;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='%23ffffff' fill-opacity='1' d='M0,96L48,112C96,128,192,160,288,165.3C384,171,480,149,576,144C672,139,768,149,864,170.7C960,192,1056,224,1152,213.3C1248,203,1344,149,1392,122.7L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z'%3E%3C/path%3E%3C/svg%3E") no-repeat;
+            background-size: cover;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 3rem;
+            position: relative;
+            z-index: 1;
+            padding-bottom: 100px;
+        }
+
+        .feature-item {
+            text-align: center;
+            background: white;
+            padding: 2.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .feature-item:nth-child(1) {
+            border-radius: 60% 40% 40% 60% / 60% 60% 40% 40%;
+            border: 3px solid #00ff00;
+        }
+
+        .feature-item:nth-child(2) {
+            border-radius: 40% 60% 60% 40% / 40% 40% 60% 60%;
+            border: 3px solid #0066cc;
+        }
+
+        .feature-item:nth-child(3) {
+            border-radius: 50% 50% 40% 60% / 60% 40% 60% 40%;
+            border: 3px solid #ff0000;
+        }
+
+        .feature-item:nth-child(4) {
+            border-radius: 40% 60% 50% 50% / 40% 60% 40% 60%;
+            border: 3px solid #000000;
+        }
+
+        .feature-item:hover {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        }
+
+        .feature-number {
+            display: inline-block;
+            width: 80px;
+            height: 80px;
+            background: #000000;
+            color: #ffffff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .feature-number::after {
+            content: '⭐';
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            font-size: 1.5rem;
+        }
+
+        .feature-item h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #000000;
+            font-weight: 800;
+        }
+
+        /* 课程信息 - 任务板风格 */
+        .mission-board {
+            background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+            color: #ffffff;
+            padding: 4rem;
+            border-radius: 50px 20px 50px 20px;
+            margin: 4rem 0;
+            border: 4px solid #00ff00;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mission-board::before {
+            content: '🚀';
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 3rem;
+            opacity: 0.3;
+        }
+
+        .mission-board h3 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: #00ff00;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .mission-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .mission-item {
+            padding: 1.5rem;
+            background: rgba(0, 255, 0, 0.1);
+            border-radius: 20px;
+            border: 2px solid #00ff00;
+            transition: all 0.3s ease;
+        }
+
+        .mission-item:hover {
+            background: rgba(0, 255, 0, 0.2);
+            transform: scale(1.05);
+        }
+
+        .mission-item h4 {
+            color: #00ff00;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .mission-item h4::before {
+            content: '✓';
+            display: inline-block;
+            width: 25px;
+            height: 25px;
+            background: #00ff00;
+            color: #000000;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 25px;
+            font-weight: 900;
+        }
+
+        /* 价格信息 */
+        .price-section {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeeba 100%);
+            padding: 4rem;
+            border-radius: 30px 70px 30px 70px;
+            margin: 4rem 0;
+            border: 4px solid #ffc107;
+            text-align: center;
+        }
+
+        .price-tag {
+            font-size: 4rem;
+            font-weight: 900;
+            color: #ff0000;
+            margin-bottom: 1rem;
+            display: inline-block;
+            padding: 1rem 3rem;
+            background: #ffffff;
+            border-radius: 50px;
+            border: 4px solid #ff0000;
+            transform: rotate(-5deg);
+            animation: price-bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes price-bounce {
+            0%, 100% { transform: rotate(-5deg) scale(1); }
+            50% { transform: rotate(-5deg) scale(1.1); }
+        }
+
+        .price-details {
+            font-size: 1.3rem;
+            color: #333333;
+            line-height: 2;
+            margin-top: 2rem;
+        }
+
+        .location-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-top: 3rem;
+            text-align: left;
+        }
+
+        .location-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .location-card h4 {
+            color: #0066cc;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        /* 风险提示 */
+        .risk-notice {
+            background: rgba(255, 0, 0, 0.05);
+            border: 2px solid #ff0000;
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 3rem 0;
+        }
+
+        .risk-notice h4 {
+            color: #ff0000;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .risk-notice ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .risk-notice li {
+            padding: 0.5rem 0;
+            padding-left: 2rem;
+            position: relative;
+        }
+
+        .risk-notice li::before {
+            content: '⚠️';
+            position: absolute;
+            left: 0;
+        }
+
+        /* 成功故事 - 成就解锁风格 */
+        .achievement {
+            background: linear-gradient(135deg, #e6ffe6 0%, #ccffcc 100%);
+            border: 4px solid #00ff00;
+            border-radius: 70px 30px 70px 30px;
+            padding: 3rem;
+            margin: 3rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .achievement::before {
+            content: '🏆 成就解锁！';
+            position: absolute;
+            top: -10px;
+            left: 30px;
+            background: #00ff00;
+            color: #000000;
+            padding: 0.5rem 1.5rem;
+            border-radius: 20px;
+            font-weight: 800;
+            font-size: 1.2rem;
+        }
+
+        .achievement h3 {
+            font-size: 2rem;
+            color: #000000;
+            margin-bottom: 1rem;
+            margin-top: 1rem;
+        }
+
+        .achievement p {
+            color: #333333;
+            font-size: 1.2rem;
+            line-height: 1.8;
+        }
+
+        /* 学生作品展示 */
+        .student-works {
+            background: #f0f9ff;
+            padding: 4rem 0;
+            position: relative;
+        }
+
+        .student-game-card {
+            background: white;
+            border: 3px solid #0066cc;
+            border-radius: 30px;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 102, 204, 0.1);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .student-game-card h3 {
+            color: #0066cc;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .student-game-card .student-name {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 1.5rem;
+        }
+
+        /* 联系区域 - 游戏结束画面风格 */
+        .contact {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            padding-bottom: 6rem;
+        }
+
+        .contact::before,
+        .contact::after {
+            content: '⭐';
+            position: absolute;
+            font-size: 4rem;
+            opacity: 0.1;
+            animation: twinkle 3s ease-in-out infinite;
+        }
+
+        .contact::before {
+            top: 10%;
+            left: 10%;
+        }
+
+        .contact::after {
+            bottom: 10%;
+            right: 10%;
+            animation-delay: 1.5s;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.1; transform: scale(1); }
+            50% { opacity: 0.3; transform: scale(1.2); }
+        }
+
+        .contact-box {
+            background: #ffffff;
+            padding: 3rem;
+            border-radius: 50px 20px 50px 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border: 4px solid #0066cc;
+            display: inline-block;
+            margin-top: 2rem;
+        }
+
+        .contact-box h3 {
+            font-size: 1.8rem;
+            color: #0066cc;
+            margin-bottom: 1.5rem;
+            font-weight: 800;
+        }
+
+        .contact-details {
+            font-size: 1.3rem;
+            color: #000000;
+            font-weight: 700;
+            line-height: 2;
+        }
+
+        .qr-code-section {
+            margin-top: 3rem;
+            padding: 2rem;
+            background: linear-gradient(135deg, #f0f0f0 0%, #e0e0e0 100%);
+            border-radius: 30px;
+            display: inline-block;
+        }
+
+        .qr-placeholder {
+            width: 200px;
+            height: 200px;
+            background: white;
+            border: 2px solid #333;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 1.2rem;
+            color: #666;
+        }
+
+        /* 页脚 - 游戏积分板风格 */
+        footer {
+            background: #000000;
+            color: #ffffff;
+            text-align: center;
+            padding: 2.5rem 0;
+            border-top: 4px solid #00ff00;
+            position: relative;
+        }
+
+        footer p {
+            font-size: 1.2rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+
+        footer::before,
+        footer::after {
+            content: '🎮';
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.5rem;
+        }
+
+        footer::before { left: 20%; }
+        footer::after { right: 20%; }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .hero-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .hero-text h1 {
+                font-size: 2.5rem;
+            }
+
+            .game-console {
+                margin-top: 2rem;
+            }
+
+            .btn {
+                display: block;
+                width: 100%;
+                margin-bottom: 1rem;
+            }
+
+            .btn-learn {
+                margin-left: 0;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .games-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .location-info {
+                grid-template-columns: 1fr;
+            }
+
+            .price-tag {
+                font-size: 3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav>
+        <div class="nav-container">
+            <div class="logo">LOUIS</div>
+            <ul>
+                <li><a href="#home">开始</a></li>
+                <li><a href="#games">作品</a></li>
+                <li><a href="#teaching">课程</a></li>
+                <li><a href="#contact">联系</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- 英雄区域 -->
+    <section id="home" class="hero">
+        <div class="pixel-decoration pixel-1"></div>
+        <div class="pixel-decoration pixel-2"></div>
+        <div class="pixel-decoration pixel-3"></div>
+        
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1>嘿！我是Louis</h1>
+                    <span class="subtitle">🎮 8岁游戏创造者</span>
+                    <p>
+                        欢迎来到我的游戏星球！我用AI魔法把想象变成真正的游戏。
+                        已经创造了3个超酷的游戏，还教会了小伙伴做自己的游戏！
+                    </p>
+                    <p style="font-size: 1.3rem; color: #0066cc; font-weight: 700; margin-top: 1rem;">
+                        让我们一起创造个游戏吧！🎮
+                    </p>
+                    <div>
+                        <a href="#games" class="btn btn-play">开始冒险</a>
+                        <a href="#teaching" class="btn btn-learn">学习魔法</a>
+                    <div style="margin-top: 2rem;">
+                    <p style="font-size: 1.2rem; color: #ff0000; font-weight: 700; margin-bottom: 1rem;">
+                        🎮 恐龙化石游戏即将上线！
+                    </p>
+                    <p style="color: #666;">我们正在完善这个游戏，很快就能和大家见面啦！</p>
+                </div>
+                </div>
+                <div class="hero-visual">
+                    <div class="game-console">
+                        <div class="console-screen">
+                            <div class="console-text">
+                                > 正在加载Louis的游戏世界...<br>
+                                > 发现3个已完成的游戏 ✓<br>
+                                > 检测到1个成功的学生 ✓<br>
+                                > 创意值：∞<br>
+                                > 准备好开始你的冒险了吗？<br>
+                                > <span class="cursor"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="wave"></div>
+    </section>
+
+    <!-- 游戏作品 -->
+    <section id="games" class="section">
+        <div class="container">
+            <h2 class="section-title title-green">🎮 我的游戏宝库</h2>
+            <p class="section-subtitle">每个游戏都是一次新的冒险！点击试玩！</p>
+            
+            <div class="games-grid">
+                <div class="game-card">
+                    <div class="game-header">
+                        <div class="game-icon">🐍</div>
+                        <div>
+                            <h3>超级贪吃蛇</h3>
+                        </div>
+                    </div>
+                    <p>不只是普通的贪吃蛇！有魔法道具、神秘关卡，还有BOSS战！每次游戏都有新惊喜等着你。</p>
+                    <a href="https://mackenzie-zhang.github.io/louis-s-first-game-snakeGAME/" target="_blank" class="play-btn">立即试玩 →</a>
+                </div>
+                
+                <div class="game-card">
+                    <div class="game-header">
+                        <div class="game-icon">💎</div>
+                        <div>
+                            <h3>Labubu消消乐</h3>
+                        </div>
+                    </div>
+                    <p>超萌的Labubu主题消消乐！连连看遇上物理引擎，每一次消除都像放烟花一样绚丽！</p>
+                    <a href="https://mackenzie-zhang.github.io/louis-s-first-game-snakeGAME/match3.html" target="_blank" class="play-btn">立即试玩 →</a>
+                </div>
+                
+                <div class="game-card">
+                    <div class="game-header">
+                        <div class="game-icon">🦕</div>
+                        <div>
+                            <h3>恐龙探险家</h3>
+                        </div>
+                    </div>
+                    <p>我的第一个学生作品！一起挖掘恐龙化石，解开远古的秘密。这证明了每个小朋友都能做游戏！</p>
+                    <a href="#" class="play-btn">立即试玩 →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 教学特色 -->
+    <section id="teaching" class="section features">
+        <div class="container">
+            <h2 class="section-title title-blue">🚀 跟我一起升级</h2>
+            <p class="section-subtitle">解锁你的游戏开发超能力！</p>
+            
+            <div class="features-grid">
+                <div class="feature-item">
+                    <div class="feature-number">01</div>
+                    <h3>小朋友语言</h3>
+                    <p>没有难懂的术语，只有好玩的比喻。编程就像搭积木一样简单！</p>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-number">02</div>
+                    <h3>即学即用</h3>
+                    <p>第一节课就能做出小游戏，马上就能给朋友们炫耀！</p>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-number">03</div>
+                    <h3>AI小助手</h3>
+                    <p>有了AI的帮助，不会打字也能编程，让想象力自由飞翔！</p>
+                </div>
+                
+                <div class="feature-item">
+                    <div class="feature-number">04</div>
+                    <h3>创业思维</h3>
+                    <p>不只是做游戏，还要学会像企业家一样思考！</p>
+                </div>
+            </div>
+            <div class="features-wave"></div>
+        </div>
+    </section>
+
+    <!-- 价格信息 -->
+    <section class="section">
+        <div class="container">
+            <div class="price-section">
+                <div class="price-tag">￥20/小时</div>
+                <h3 style="font-size: 2rem; color: #000; margin-bottom: 2rem;">超值游戏开发课程</h3>
+                
+                <div class="price-details">
+                    <p><strong>课程时长：</strong>1小时/节</p>
+                    <p><strong>课程内容：</strong>从零开始制作属于你的小游戏</p>
+                </div>
+
+                <div class="location-info">
+                    <div class="location-card">
+                        <h4>📍 千灯湖范围内</h4>
+                        <p><strong>上课方式：</strong>面对面教学</p>
+                        <p><strong>上课地点：</strong></p>
+                        <ul style="list-style: none; padding-left: 1rem;">
+                            <li>☕ 附近咖啡厅</li>
+                            <li>🏠 认识的朋友可在家里</li>
+                        </ul>
+                    </div>
+                    <div class="location-card">
+                        <h4>🌐 千灯湖范围外</h4>
+                        <p><strong>上课方式：</strong>线上教学</p>
+                        <p><strong>上课工具：</strong></p>
+                        <ul style="list-style: none; padding-left: 1rem;">
+                            <li>💻 视频通话</li>
+                            <li>🖥️ 屏幕共享</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="risk-notice">
+                    <h4>📋 温馨提示</h4>
+                    <ul>
+                        <li>如果由于我们设备或其他故障问题导致超时，不另外计费，直到游戏制作成功</li>
+                        <li>如果在一小时内已经完成小游戏，还想制作其他游戏，需要额外收费</li>
+                        <li>建议提前沟通好想做的游戏类型，这样上课更高效</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 任务板 -->
+            <div class="mission-board">
+                <h3>🎯 学习任务</h3>
+                <div class="mission-list">
+                    <div class="mission-item">
+                        <h4>新手村</h4>
+                        <p>认识AI朋友<br>第一个小游戏<br>基础游戏元素</p>
+                    </div>
+                    <div class="mission-item">
+                        <h4>冒险岛</h4>
+                        <p>复杂的游戏机制<br>音效和画面<br>玩家体验设计</p>
+                    </div>
+                    <div class="mission-item">
+                        <h4>大师殿堂</h4>
+                        <p>独立项目开发<br>团队合作<br>发布自己的游戏</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 成就故事 -->
+            <div class="achievement">
+                <h3>我的第一个学生成功了！</h3>
+                <p>
+                    昨天是超级特别的一天！我的学生完成了恐龙化石游戏，
+                    从"哇，这好难"到"耶！我做到了"，那个笑容太棒了！
+                    这让我相信：每个小朋友心里都住着一个游戏设计师，
+                    只要给他们正确的钥匙🗝️
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 学生作品展示 -->
+    <section class="student-works">
+        <div class="container">
+            <h2 class="section-title title-blue">🌟 学生作品展示</h2>
+            <p class="section-subtitle">看看其他小朋友的创意！</p>
+            
+            <div class="student-game-card">
+                <h3>🦕 恐龙化石探险</h3>
+                <p class="student-name">作者：我的第一个学生</p>
+                <p style="margin-bottom: 2rem;">挖掘化石，收集恐龙骨架，还原史前世界！这个游戏充满了探索的乐趣。</p>
+                <a href="#" class="play-btn">试玩学生作品 →</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 联系方式 -->
+    <section id="contact" class="section contact">
+        <div class="container">
+            <h2 class="section-title title-red">🌟 加入游戏创造者联盟</h2>
+            <p class="section-subtitle">你的游戏冒险即将开始！</p>
+            
+            <div class="contact-box">
+                <h3>准备好了吗？</h3>
+                <p style="margin-bottom: 2rem; font-size: 1.1rem;">想要开始你的游戏开发之旅？<br>联系我的妈妈预约时间吧！</p>
+                <div class="contact-details">
+                    <p>📧 联系邮箱请咨询</p>
+                    <p>📱 Mackenzie悦 (*悦)</p>
+                </div>
+                
+                <div class="qr-code-section">
+                    <h4 style="color: #0066cc; margin-bottom: 1rem;">扫码付款 & 预约课程</h4>
+                    <div class="qr-placeholder" style="padding: 1rem; background: white;">
+                        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==" 
+                             alt="微信二维码" 
+                             style="width: 180px; height: 180px; display: block; margin: 0 auto;">
+                        <p style="margin-top: 1rem; font-size: 0.9rem; color: #666;">请上传二维码图片</p>
+                    </div>
+                    <p style="font-size: 1rem; color: #666; margin-top: 1rem;">
+                        ￥20.00<br>
+                        Louis AI家教课堂一对一<br>
+                        <strong>Mackenzie悦 (*悦)</strong>
+                    </p>
+                </div>
+            </div>
+            <div style="margin-top: 2rem;">
+                <a href="mailto:[您的邮箱]" class="btn btn-play">发送邮件咨询</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer>
+        <div class="container">
+            <p>© 2025 Louis的游戏星球 | GAME OVER? GAME FOREVER!</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript效果 -->
+    <script>
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // 打字机效果
+        const consoleText = document.querySelector('.console-text');
+        if (consoleText) {
+            const originalHTML = consoleText.innerHTML;
+            consoleText.innerHTML = '';
+            let i = 0;
+            
+            function typeWriter() {
+                if (i < originalHTML.length) {
+                    consoleText.innerHTML = originalHTML.slice(0, i) + '<span class="cursor"></span>';
+                    i++;
+                    setTimeout(typeWriter, 50);
+                } else {
+                    consoleText.innerHTML = originalHTML;
+                }
+            }
+            
+            // 当元素进入视图时开始打字效果
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        typeWriter();
+                        observer.unobserve(entry.target);
+                    }
+                });
+            });
+            
+            observer.observe(consoleText);
+        }
+
+        // 滚动动画
+        const animateOnScroll = () => {
+            const elements = document.querySelectorAll('.game-card, .feature-item, .mission-item');
+            
+            elements.forEach(element => {
+                const elementTop = element.getBoundingClientRect().top;
+                const elementBottom = element.getBoundingClientRect().bottom;
+                
+                if (elementTop < window.innerHeight && elementBottom > 0) {
+                    element.style.opacity = '1';
+                    element.style.transform = 'translateY(0)';
+                }
+            });
+        };
+
+        // 初始化动画
+        document.querySelectorAll('.game-card, .feature-item, .mission-item').forEach(element => {
+            element.style.opacity = '0';
+            element.style.transform = 'translateY(30px)';
+            element.style.transition = 'all 0.6s ease';
+        });
+
+        window.addEventListener('scroll', animateOnScroll);
+        animateOnScroll();
+
+        // 游戏试玩按钮提示 - 只针对还没链接的游戏
+        document.querySelectorAll('.play-btn[href="#"]').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                alert('游戏正在准备中！敬请期待！');
+            });
+        });
+    </script>
+</body>
+</html>
