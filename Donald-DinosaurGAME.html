@@ -386,23 +386,29 @@
             
             #diggingArea {
                 width: 100%;
-                height: 350px;
+                height: 450px;  /* 增加高度 */
                 max-width: 100vw;
             }
             
             #assemblyArea {
                 width: 100%;
-                height: 300px;
+                height: 200px;  /* 减小高度 */
                 max-width: 100vw;
             }
             
+            #skeletonOutline {
+                flex-direction: row;  /* 横向排列 */
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+            
             .rock {
-                width: 70px !important;
-                height: 50px !important;
+                width: 60px !important;  /* 石头更小 */
+                height: 45px !important;
             }
             
             #trex {
-                font-size: 50px;
+                font-size: 40px;  /* 霸王龙也小一点 */
                 bottom: 5px;
                 right: 5px;
             }
@@ -414,12 +420,22 @@
             }
             
             .skeletonPart {
-                font-size: 24px !important;
-                margin: 8px 0 !important;
+                font-size: 18px !important;  /* 文字更小 */
+                margin: 5px !important;
+            }
+            
+            .assembledPart {
+                font-size: 30px !important;  /* 组装后的图标也小一点 */
             }
             
             .fossilPart {
-                font-size: 35px !important;
+                font-size: 30px !important;  /* 化石更小 */
+            }
+            
+            /* 调整石头位置更紧凑 */
+            .glowingHint {
+                width: 80px !important;
+                height: 65px !important;
             }
         }
 
@@ -707,24 +723,26 @@
                     }
                 }
             } else if (currentLevel === 2) {
-                // 第二关：手机适配 - 3x4布局
-                for (let i = 0; i < 3; i++) {
-                    for (let j = 0; j < 4; j++) {
-                        if (i * 4 + j < 10) {  // 只创建10个位置
+                // 第二关：手机适配 - 4x3布局更紧凑
+                let count = 0;
+                for (let i = 0; i < 4; i++) {
+                    for (let j = 0; j < 3; j++) {
+                        if (count < 10) {
                             positions.push({
-                                x: 40 + i * 85,
-                                y: 20 + j * 85
+                                x: 20 + i * 65,  // 间距更小
+                                y: 50 + j * 65
                             });
+                            count++;
                         }
                     }
                 }
             } else if (currentLevel === 3) {
-                // 第三关：手机适配 - 4x5布局
-                for (let i = 0; i < 4; i++) {
-                    for (let j = 0; j < 5; j++) {
+                // 第三关：手机适配 - 5x4布局超紧凑
+                for (let i = 0; i < 5; i++) {
+                    for (let j = 0; j < 4; j++) {
                         positions.push({
-                            x: 20 + i * 70,
-                            y: 10 + j * 68
+                            x: 10 + i * 55,  // 很小的间距
+                            y: 30 + j * 55
                         });
                     }
                 }
@@ -748,7 +766,7 @@
                 fossil.textContent = config.emojis[i];
                 fossil.dataset.partName = config.parts[i];
                 fossil.dataset.index = i;
-                fossil.style.left = pos.x + 18 + 'px';
+                fossil.style.left = pos.x + 15 + 'px';
                 fossil.style.top = pos.y + 8 + 'px';
                 diggingArea.appendChild(fossil);
                 fossilParts.push(fossil);
@@ -898,8 +916,8 @@
                 
                 const hint = document.createElement('div');
                 hint.className = 'glowingHint';
-                hint.style.left = (parseInt(rock.style.left) - 25) + 'px';
-                hint.style.top = (parseInt(rock.style.top) - 20) + 'px';
+                hint.style.left = (parseInt(rock.style.left) - 10) + 'px';
+                hint.style.top = (parseInt(rock.style.top) - 10) + 'px';
                 document.getElementById('diggingArea').appendChild(hint);
                 
                 setTimeout(() => hint.remove(), 5000);
