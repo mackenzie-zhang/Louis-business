@@ -217,6 +217,51 @@
             line-height: 1.8;
         }
 
+        /* Louis照片样式 */
+        .louis-photo-container {
+            position: relative;
+            display: inline-block;
+            animation: float-photo 4s ease-in-out infinite;
+        }
+
+        @keyframes float-photo {
+            0%, 100% { transform: translateY(0) rotate(-2deg); }
+            50% { transform: translateY(-20px) rotate(2deg); }
+        }
+
+        .louis-photo {
+            width: 400px;
+            height: auto;
+            border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+            border: 5px solid #00ff00;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            object-fit: cover;
+        }
+
+        .photo-decoration {
+            position: absolute;
+            top: -20px;
+            right: -20px;
+            width: 100px;
+            height: 100px;
+            background: #ff0000;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            animation: rotate 4s linear infinite;
+        }
+
+        .photo-decoration::after {
+            content: '👋';
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
         /* 游戏控制台风格 */
         .game-console {
             background: #1a1a1a;
@@ -850,45 +895,235 @@
         footer::before { left: 20%; }
         footer::after { right: 20%; }
 
-        /* 响应式设计 */
+        /* 响应式设计 - 完整优化 */
+        @media (max-width: 1200px) {
+            .games-grid {
+                grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            }
+            
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
         @media (max-width: 768px) {
+            /* 导航优化 */
+            nav ul {
+                gap: 1rem;
+                font-size: 0.9rem;
+            }
+
+            nav a {
+                font-size: 0.85rem;
+                padding: 3px 8px;
+            }
+
+            .logo {
+                font-size: 1.5rem;
+            }
+
+            .logo::after {
+                display: none;
+            }
+
+            /* 英雄区域 */
+            .hero {
+                padding: 6rem 0 2rem;
+            }
+
             .hero-content {
                 grid-template-columns: 1fr;
                 text-align: center;
+                gap: 2rem;
             }
 
             .hero-text h1 {
                 font-size: 2.5rem;
             }
 
-            .game-console {
-                margin-top: 2rem;
+            .hero-text .subtitle {
+                font-size: 1.2rem;
             }
 
+            .hero-text p {
+                font-size: 1.1rem;
+            }
+
+            /* 移动端优化 */
+            .louis-photo {
+                width: 300px;
+            }
+            
+            .photo-decoration {
+                width: 80px;
+                height: 80px;
+                font-size: 2.5rem;
+            }
+
+            /* 按钮优化 */
             .btn {
                 display: block;
                 width: 100%;
                 margin-bottom: 1rem;
+                padding: 0.9rem 2rem;
+                font-size: 1.1rem;
             }
 
             .btn-learn {
                 margin-left: 0;
             }
 
+            /* 标题优化 */
             .section-title {
+                font-size: 2.2rem;
+            }
+
+            .section-subtitle {
+                font-size: 1.1rem;
+                padding: 0 1rem;
+            }
+
+            /* 游戏卡片 */
+            .games-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .game-card {
+                padding: 2rem;
+            }
+
+            .game-card h3 {
+                font-size: 1.5rem;
+            }
+
+            .game-card p {
+                font-size: 1rem;
+            }
+
+            /* 特性网格 */
+            .features-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+                padding-bottom: 50px;
+            }
+
+            .feature-item {
+                padding: 2rem;
+            }
+
+            .feature-number {
+                width: 60px;
+                height: 60px;
+                font-size: 1.5rem;
+            }
+
+            /* 任务板 */
+            .mission-board {
+                padding: 2.5rem 1.5rem;
+                border-radius: 30px;
+            }
+
+            .mission-board h3 {
                 font-size: 2rem;
             }
 
-            .games-grid {
+            .mission-list {
                 grid-template-columns: 1fr;
+            }
+
+            /* 价格区域 */
+            .price-tag {
+                font-size: 3rem;
+                padding: 0.8rem 2rem;
+            }
+
+            .price-section {
+                padding: 3rem 1.5rem;
             }
 
             .location-info {
                 grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .location-card {
+                padding: 1.5rem;
+            }
+
+            /* 成就区域 */
+            .achievement {
+                padding: 2rem;
+            }
+
+            .achievement h3 {
+                font-size: 1.5rem;
+            }
+
+            .achievement p {
+                font-size: 1.1rem;
+            }
+
+            /* 联系区域 */
+            .contact-box {
+                padding: 2rem;
+                border-radius: 30px;
+            }
+
+            .contact-box h3 {
+                font-size: 1.5rem;
+            }
+
+            .contact-details {
+                font-size: 1.1rem;
+            }
+
+            /* 页脚 */
+            footer p {
+                font-size: 1rem;
+                padding: 0 1rem;
+            }
+
+            footer::before,
+            footer::after {
+                display: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            /* 超小屏幕优化 */
+            .container {
+                padding: 0 1rem;
+            }
+
+            .hero-text h1 {
+                font-size: 2rem;
+            }
+
+            .section-title {
+                font-size: 1.8rem;
+            }
+
+            .game-card {
+                padding: 1.5rem;
+                border-radius: 20px;
+            }
+
+            .feature-item {
+                padding: 1.5rem;
             }
 
             .price-tag {
-                font-size: 3rem;
+                font-size: 2.5rem;
+            }
+
+            nav ul {
+                gap: 0.5rem;
+            }
+
+            nav a {
+                font-size: 0.8rem;
+                padding: 2px 6px;
             }
         }
     </style>
@@ -928,25 +1163,12 @@
                     <div>
                         <a href="#games" class="btn btn-play">开始冒险</a>
                         <a href="#teaching" class="btn btn-learn">学习魔法</a>
-                    <div style="margin-top: 2rem;">
-                    <p style="font-size: 1.2rem; color: #ff0000; font-weight: 700; margin-bottom: 1rem;">
-                        🎮 恐龙化石游戏即将上线！
-                    </p>
-                    <p style="color: #666;">我们正在完善这个游戏，很快就能和大家见面啦！</p>
-                </div>
+                    </div>
                 </div>
                 <div class="hero-visual">
-                    <div class="game-console">
-                        <div class="console-screen">
-                            <div class="console-text">
-                                > 正在加载Louis的游戏世界...<br>
-                                > 发现3个已完成的游戏 ✓<br>
-                                > 检测到1个成功的学生 ✓<br>
-                                > 创意值：∞<br>
-                                > 准备好开始你的冒险了吗？<br>
-                                > <span class="cursor"></span>
-                            </div>
-                        </div>
+                    <div class="louis-photo-container">
+                        <img src="louis-photo.jpg" alt="Louis - 8岁游戏创造者" class="louis-photo">
+                        <div class="photo-decoration"></div>
                     </div>
                 </div>
             </div>
@@ -991,8 +1213,15 @@
                         </div>
                     </div>
                     <p>我的第一个学生作品！一起挖掘恐龙化石，解开远古的秘密。这证明了每个小朋友都能做游戏！</p>
-                    <a href="#" class="play-btn">立即试玩 →</a>
+                    <a href="https://mackenzie-zhang.github.io/Louis-business/Donald-DinosaurGAME.html" target="_blank" class="play-btn">立即试玩 →</a>
                 </div>
+            </div>
+            
+            <div style="margin-top: 2rem; text-align: center;">
+                <p style="font-size: 1.2rem; color: #00ff00; font-weight: 700; margin-bottom: 1rem;">
+                    🎉 更多的游戏，期待你的创作！
+                </p>
+                <p style="color: #666;">加入我们！上线属于你自己的游戏！</p>
             </div>
         </div>
     </section>
@@ -1096,12 +1325,13 @@
 
             <!-- 成就故事 -->
             <div class="achievement">
-                <h3>我的第一个学生成功了！</h3>
-                <p>
-                    昨天是超级特别的一天！我的学生完成了恐龙化石游戏，
-                    从"哇，这好难"到"耶！我做到了"，那个笑容太棒了！
-                    这让我相信：每个小朋友心里都住着一个游戏设计师，
-                    只要给他们正确的钥匙🗝️
+                <h3>来自6岁的Bang：</h3>
+                <p style="font-size: 1.4rem; font-style: italic;">
+                    "AI课好好玩，我还想上，我做出了第一个自己的游戏！我还要做更多！"
+                </p>
+                <p style="font-size: 1rem; color: #666; margin-top: 1.5rem; line-height: 1.8;">
+                    <small>孩子的创造力可以发挥和实现，马上就有正反馈。<br>
+                    领导力、表达能力、主动性、沟通能力、创造力都可以提升。</small>
                 </p>
             </div>
         </div>
@@ -1115,9 +1345,9 @@
             
             <div class="student-game-card">
                 <h3>🦕 恐龙化石探险</h3>
-                <p class="student-name">作者：我的第一个学生</p>
+                <p class="student-name">作者：Bang（6岁）- 我的第一个学生</p>
                 <p style="margin-bottom: 2rem;">挖掘化石，收集恐龙骨架，还原史前世界！这个游戏充满了探索的乐趣。</p>
-                <a href="#" class="play-btn">试玩学生作品 →</a>
+                <a href="https://mackenzie-zhang.github.io/Louis-business/Donald-DinosaurGAME.html" target="_blank" class="play-btn">试玩学生作品 →</a>
             </div>
         </div>
     </section>
@@ -1132,18 +1362,16 @@
                 <h3>准备好了吗？</h3>
                 <p style="margin-bottom: 2rem; font-size: 1.1rem;">想要开始你的游戏开发之旅？<br>联系我的妈妈预约时间吧！</p>
                 <div class="contact-details">
-                    <p>📧 联系邮箱请咨询</p>
-                    <p>📱 Mackenzie悦 (*悦)</p>
+                    <p>📱 添加微信：<strong>moon9094</strong></p>
+                    <p style="color: #666; font-size: 1.1rem;">备注：LouisAI课</p>
                 </div>
                 
                 <div class="qr-code-section">
                     <h4 style="color: #0066cc; margin-bottom: 1rem;">扫码付款 & 预约课程</h4>
                     <div class="qr-placeholder" style="padding: 1rem; background: white;">
-            <img src="qrcode.png"
-     alt="微信二维码"
-     style="width: 180px; height: 180px; display: block; margin: 0 auto;">
-<p style="margin-top: 1rem; font-size: 0.9rem; color: #666;">请上传二维码图片</p>
-
+                        <img src="wechat-qr.png" 
+                             alt="微信二维码" 
+                             style="width: 180px; height: 180px; display: block; margin: 0 auto;">
                     </div>
                     <p style="font-size: 1rem; color: #666; margin-top: 1rem;">
                         ￥20.00<br>
@@ -1153,7 +1381,7 @@
                 </div>
             </div>
             <div style="margin-top: 2rem;">
-                <a href="mailto:[您的邮箱]" class="btn btn-play">发送邮件咨询</a>
+                <p style="font-size: 1.3rem; color: #0066cc; font-weight: 700;">💬 立即添加微信咨询</p>
             </div>
         </div>
     </section>
@@ -1181,7 +1409,8 @@
             });
         });
 
-        // 打字机效果
+        // 打字机效果 - 移除或注释掉
+        /*
         const consoleText = document.querySelector('.console-text');
         if (consoleText) {
             const originalHTML = consoleText.innerHTML;
@@ -1210,6 +1439,7 @@
             
             observer.observe(consoleText);
         }
+        */
 
         // 滚动动画
         const animateOnScroll = () => {
